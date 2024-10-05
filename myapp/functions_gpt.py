@@ -38,11 +38,22 @@ def send_whatsapp_message(recipient_number, message_text):
     return response.status_code, response.json()
 
 def get_chatgpt_response(message):
+
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Você é um assistente especializado em mecânica automotiva."},
+            {
+                "role": "system",
+                "content": (
+                    "Você é um assistente virtual especializado em mecânica automotiva. "
+                    "Você oferece respostas detalhadas sobre manutenção de veículos, diagnóstico de problemas, "
+                    "melhores práticas para economia de combustível, e peças de reposição. Suas respostas devem "
+                    "ser claras e adaptadas ao nível de conhecimento do usuário, evitando jargões técnicos, "
+                    "a menos que o usuário peça explicações mais técnicas."
+                )
+            },
             {"role": "user", "content": message}
         ]
     )
-    return response['choices'][0]['message']['content']
+    return response['choices'][0]['message']['content'].strip()
+

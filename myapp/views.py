@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse
 from rest_framework import status
 
-from utils import *
+from myapp.functions_gpt import *
 
 class WhatsAppWebhookView(APIView):
 

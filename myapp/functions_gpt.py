@@ -1,8 +1,28 @@
+'''
+P. Ativar a aplicação
+1. ngrok http 8000
+2. token ngrok
+3. token meta
+
+Doc. para liberação do token permanente do WPP
+https://developers.facebook.com/docs/whatsapp/business-management-api/get-started#1--acquire-an-access-token-using-a-system-user-or-facebook-login
+
+'''
+
 import openai
 import requests
 import json
+from myapp.sheets import inputs_ai
+from myapp.models import Conversa, Interacao
 
-# openai.api_key = aqui seu token
+OPENAI_KEY = "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"
+openai.api_key = OPENAI_KEY
+
+#from dotenv import load_dotenv,dotenv_values
+#load_dotenv()
+#config = dotenv_values(".env2")
+#print(config.get('MEUTOKEN'))
+
 
 def tratar_numero_wa(wa_id):
     # Verifique se o número começa com o código de país +55 (Brasil)
@@ -19,13 +39,15 @@ def tratar_numero_wa(wa_id):
     else:
         # Se não for um número no formato esperado, retorna o número sem modificação
         return wa_id
+
     
 def send_whatsapp_message(recipient_number, message_text):
     url = f"https://graph.facebook.com/v20.0/458377177351953/messages"
     headers = {
-        "Authorization": "Bearer EAAHV2ZBvVYMsBOZCwjEwpa0ZCpCeZCy9JfJu8YuOjzF6W2KG9ahaiqrwfBHCo1UOQeGufYvZBNHWDQIGSkeDQbBVKZB5uXUCJLDHVNz2Fl6i77jkJ4m4DvRSqaHVtdxiWDL9S15AaXzXXZAyCAJE3wf6uAQtCIEh6oKINYRe9i2MvtZCHtbp8ia3UIsUO0eGZA0QeWVZCtYUeGSS0ej87W2qJFrqJQ1iN3zIf6AQUZD",  # Substitua pelo seu token de acesso válido
+        "Authorization": "Bearer EAAH2zMGGDWEBO8jZCBvW3tOw5LXrQHJ01vEq6gTMrvNRrixLFlMYmjVJrTQKdhxzKYtqpyW4vs61Ac9CwZBb6ei92YLgGCyeQxrwZAjfI8Hozwmy3IRIZBUpzSuxxU9scgorgWDgugeCSzUyjlWx5EL0mPL5ONNhmdTqXKn4ZAgtTkM1cwVCdDZCjeqIUL1Wf4YHo87FZCx40Hv11c6NiQhiOujisevpE7h8SkZD",  # Substitua pelo seu token de acesso válido
         "Content-Type": "application/json"
     }
+
     payload = {
         "messaging_product": "whatsapp",
         "to": tratar_numero_wa(recipient_number),
@@ -37,23 +59,35 @@ def send_whatsapp_message(recipient_number, message_text):
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return response.status_code, response.json()
 
-def get_chatgpt_response(message):
 
+
+def get_chatgpt_response(message):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
-                "content": (
-                    "Você é um assistente virtual especializado em mecânica automotiva. "
-                    "Você oferece respostas detalhadas sobre manutenção de veículos, diagnóstico de problemas, "
-                    "melhores práticas para economia de combustível, e peças de reposição. Suas respostas devem "
-                    "ser claras e adaptadas ao nível de conhecimento do usuário, evitando jargões técnicos, "
-                    "a menos que o usuário peça explicações mais técnicas."
-                )
+                "content": inputs_ai()[0]
             },
             {"role": "user", "content": message}
         ]
     )
     return response['choices'][0]['message']['content'].strip()
 
+
+# def criar_conversa(id_conversa, telefone):
+#     Conversa.objects.create(
+#         id_conversa = id_conversa,
+#         telefone = telefone
+#     )
+
+# def interacao(id_conversa, input_usuario):
+#     id_conversa = Conversa.objects.get(id_conversa = id_conversa)
+#     Interacao.objects.create(
+#         id_conversa = id_conversa,
+#         input_usuario = input_usuario,
+#     )
+
+
+#data
+#response_message

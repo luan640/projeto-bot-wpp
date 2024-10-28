@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%-q*v&#&2nqur(+ug7n9+b98m7@9+yaw-lewb&@ej()b4bz39b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['5ce1-168-121-27-74.ngrok-free.app']
+ALLOWED_HOSTS = ['0810-168-121-27-74.ngrok-free.app','127.0.0.1']
 
 
 # Application definition
@@ -109,11 +109,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Cuiaba' 
 
 USE_I18N = True
 
-USE_TZ = True
+USE_L10N = True
+
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

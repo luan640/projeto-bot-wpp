@@ -1,8 +1,16 @@
 import openai
 import requests
 import json
+from dotenv import load_dotenv
+import os
 
-# openai.api_key = aqui seu token
+# Load environment variables from .env file
+load_dotenv()
+
+TOKEN_OPENAI = os.getenv("TOKEN_OPENAI")
+TOKEN_FACEBOOK = os.getenv("TOKEN_FACEBOOK")
+
+openai.api_key = TOKEN_OPENAI
 
 def tratar_numero_wa(wa_id):
     # Verifique se o número começa com o código de país +55 (Brasil)
@@ -23,7 +31,7 @@ def tratar_numero_wa(wa_id):
 def send_whatsapp_message(recipient_number, message_text):
     url = f"https://graph.facebook.com/v20.0/458377177351953/messages"
     headers = {
-        "Authorization": "Bearer EAAHV2ZBvVYMsBOZCwjEwpa0ZCpCeZCy9JfJu8YuOjzF6W2KG9ahaiqrwfBHCo1UOQeGufYvZBNHWDQIGSkeDQbBVKZB5uXUCJLDHVNz2Fl6i77jkJ4m4DvRSqaHVtdxiWDL9S15AaXzXXZAyCAJE3wf6uAQtCIEh6oKINYRe9i2MvtZCHtbp8ia3UIsUO0eGZA0QeWVZCtYUeGSS0ej87W2qJFrqJQ1iN3zIf6AQUZD",  # Substitua pelo seu token de acesso válido
+        "Authorization": f"Bearer {TOKEN_FACEBOOK}",  # Substitua pelo seu token de acesso válido
         "Content-Type": "application/json"
     }
     payload = {

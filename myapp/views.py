@@ -5,6 +5,8 @@ from rest_framework import status
 
 from myapp.functions_gpt import *
 
+from .models import Interaction
+
 class WhatsAppWebhookView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -33,6 +35,12 @@ class WhatsAppWebhookView(APIView):
 
             # Gere uma resposta do ChatGPT para a mensagem recebida
             response_message = get_chatgpt_response(received_message)
+
+            Interaction.objects.create(
+                user_id=recipient_number_tratado,
+                user_message=received_message,
+                gpt_response=response_message,
+            )
 
             # Envie a resposta de volta via API do WhatsApp
             status_code, response_data = send_whatsapp_message(recipient_number_tratado, response_message)
